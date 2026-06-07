@@ -62,6 +62,13 @@ def display_tasks(tasks_list):
         print(f"{i}. {task['title']} | {task['due_date']} | {status}")
 
 
+def get_input(prompt):
+    try:
+        return input(prompt)
+    except EOFError:
+        return None
+
+
 def main():
     while True:
         print("\n=== TASK MANAGER ===")
@@ -72,12 +79,20 @@ def main():
         print("5. View Progress")
         print("6. Exit")
 
-        choice = input("Enter choice: ")
+        choice = get_input("Enter choice: ")
+        if choice is None:
+            break
 
         if choice == "1":
-            title = input("Title: ")
-            description = input("Description: ")
-            due_date = input("Due Date (YYYY-MM-DD): ")
+            title = get_input("Title: ")
+            if title is None:
+                break
+            description = get_input("Description: ")
+            if description is None:
+                break
+            due_date = get_input("Due Date (YYYY-MM-DD): ")
+            if due_date is None:
+                break
 
             if not validate_task_title(title):
                 print("Invalid title")
@@ -99,8 +114,11 @@ def main():
 
         elif choice == "4":
             display_tasks(view_all_tasks())
+            index_str = get_input("Enter task index to mark complete: ")
+            if index_str is None:
+                break
             try:
-                index = int(input("Enter task index to mark complete: "))
+                index = int(index_str)
             except ValueError:
                 print("Invalid task index.")
                 continue
