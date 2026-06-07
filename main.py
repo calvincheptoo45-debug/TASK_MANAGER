@@ -30,6 +30,7 @@ def add_task(title, description, due_date):
 
 
 def mark_task_as_complete(index):
+    index = index - 1
     if 0 <= index < len(tasks):
         tasks[index]["completed"] = True
         print("Task marked as complete!")
@@ -57,7 +58,7 @@ def display_tasks(tasks_list):
         print("No tasks found.")
         return
 
-    for i, task in enumerate(tasks_list):
+    for i, task in enumerate(tasks_list, start=1):
         status = "Done" if task["completed"] else "Pending"
         print(f"{i}. {task['title']} | {task['due_date']} | {status}")
 
@@ -73,11 +74,10 @@ def main():
     while True:
         print("\n=== TASK MANAGER ===")
         print("1. Add Task")
-        print("2. View All Tasks")
+        print("2. Mark Task as Complete")
         print("3. View Pending Tasks")
-        print("4. Mark Task as Complete")
-        print("5. View Progress")
-        print("6. Exit")
+        print("4. View Progress")
+        print("5. Exit")
 
         choice = get_input("Enter choice: ")
         if choice is None:
@@ -108,12 +108,6 @@ def main():
 
         elif choice == "2":
             display_tasks(view_all_tasks())
-
-        elif choice == "3":
-            display_tasks(view_pending_tasks())
-
-        elif choice == "4":
-            display_tasks(view_all_tasks())
             index_str = get_input("Enter task index to mark complete: ")
             if index_str is None:
                 break
@@ -124,10 +118,13 @@ def main():
                 continue
             mark_task_as_complete(index)
 
-        elif choice == "5":
+        elif choice == "3":
+            display_tasks(view_pending_tasks())
+
+        elif choice == "4":
             print(f"Progress: {task_progress():.2f}%")
 
-        elif choice == "6":
+        elif choice == "5":
             print("Goodbye!")
             break
 
