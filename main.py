@@ -1,7 +1,8 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))from task_utils import add_task, mark_task_as_complete, view_all_tasks, view_pending_tasks, task_progress
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from task_utils import add_task, mark_task_as_complete, view_all_tasks, view_pending_tasks, task_progress
 from validation import validate_task_title, validate_task_description, validate_due_date
 
 
