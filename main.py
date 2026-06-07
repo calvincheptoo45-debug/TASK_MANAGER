@@ -1,17 +1,63 @@
-import os
-import sys
+from datetime import datetime
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from task_utils import add_task, mark_task_as_complete, view_all_tasks, view_pending_tasks, task_progress
-from validation import validate_task_title, validate_task_description, validate_due_date
+tasks = []
+
+def validate_task_title(title):
+    return isinstance(title, str) and len(title.strip()) > 0
 
 
-def display_tasks(tasks):
-    if not tasks:
+def validate_task_description(description):
+    return isinstance(description, str) and len(description.strip()) > 0
+
+
+def validate_due_date(due_date):
+    try:
+        datetime.strptime(due_date, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
+
+
+def add_task(title, description, due_date):
+    task = {
+        "title": title,
+        "description": description,
+        "due_date": due_date,
+        "completed": False
+    }
+    tasks.append(task)
+    print("Task added successfully!")
+
+
+def mark_task_as_complete(index):
+    if 0 <= index < len(tasks):
+        tasks[index]["completed"] = True
+        print("Task marked as complete!")
+    else:
+        print("Invalid task index.")
+
+
+def view_pending_tasks():
+    return [t for t in tasks if not t["completed"]]
+
+
+def view_all_tasks():
+    return tasks
+
+
+def task_progress():
+    if len(tasks) == 0:
+        return 0
+    completed = sum(1 for t in tasks if t["completed"])
+    return (completed / len(tasks)) * 100
+
+
+def display_tasks(tasks_list):
+    if not tasks_list:
         print("No tasks found.")
         return
 
-    for i, task in enumerate(tasks):
+    for i, task in enumerate(tasks_list):
         status = "Done" if task["completed"] else "Pending"
         print(f"{i}. {task['title']} | {task['due_date']} | {status}")
 
@@ -53,7 +99,11 @@ def main():
 
         elif choice == "4":
             display_tasks(view_all_tasks())
-            index = int(input("Enter task index to mark complete: "))
+            try:
+                index = int(input("Enter task index to mark complete: "))
+            except ValueError:
+                print("Invalid task index.")
+                continue
             mark_task_as_complete(index)
 
         elif choice == "5":
